@@ -39,7 +39,25 @@ namespace Merchant.Engine.Navigator
                 index++;
             if (index >= ProfileLoader.hotspots.Count())
                 index = 0;
+
             return ProfileLoader.hotspots[index];
+        }
+        public Location GetNextVendorHotspot()
+        {
+            LocalPlayer player = ObjectManager.Player;
+            Location playerPos = player.Position;
+
+            if (index == -1)
+            {
+                Location closestHotspot = ProfileLoader.vendor.OrderBy(x => playerPos.GetDistanceTo(x)).First();
+                index = ProfileLoader.vendor.FindIndex(x => x.Equals(closestHotspot));
+            }
+            if (playerPos.GetDistanceTo(ProfileLoader.vendor[index]) < 2)
+                index++;
+            if (index >= ProfileLoader.vendor.Count())
+                index = 0;
+
+            return ProfileLoader.vendor[index];
         }
         public Location Path(Location destination)
         {

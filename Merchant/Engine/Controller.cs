@@ -6,11 +6,13 @@ namespace Merchant.Engine
 {
     public class Controller
     {
+        private Inventory Inventory { get; }
         private ObjectManager ObjectManager { get; }
         private Pather Pather { get; }
 
-        public Controller(ObjectManager objectManager, Pather pather)
+        public Controller(Inventory inventory, ObjectManager objectManager, Pather pather)
         {
+            Inventory = inventory;
             ObjectManager = objectManager;
             Pather = pather;
         }
@@ -18,15 +20,17 @@ namespace Merchant.Engine
         {
             LocalPlayer player = ObjectManager.Player;
 
-            switch (StatusSwitch())
+            switch (SwitchLogic())
             {
                 case Status.ALIVE:
                     Pather.Traverse(Pather.GetNextHotspot());
                     break;
                 case Status.DEAD:
+                    player.RepopMe();
                     break;
                 case Status.GHOST:
                     Pather.Traverse(player.CorpsePosition);
+                    player.RetrieveCorpse();
                     break;
                 case Status.NEED2VENDOR:
                     break;
@@ -36,17 +40,20 @@ namespace Merchant.Engine
                     break;
             }
         }
-        public Status StatusSwitch()
+        public Status SwitchLogic()
         {
             LocalPlayer player = ObjectManager.Player;
 
-            if (player.InGhostForm)
-                return Status.GHOST;
-            else if (player.IsDead)
+            if (player.IsDead)
                 return Status.DEAD;
+            else if (player.InGhostForm)
+                return Status.GHOST;
             else
             {
-                return Status.ALIVE;
+                if (Inventory.CountFreeSlots(false) <= 3)
+                    return Status.NEED2VENDOR;
+                else
+                    return Status.ALIVE;
             }
         }
     }
@@ -55,8 +62,8 @@ namespace Merchant.Engine
         ALIVE,
         DEAD,
         GHOST,
-        NEED2VENDOR,
+        NEED2REPAIR,
         NEED2RESTOCK,
-        NEED2REPAIR
+        NEED2VENDOR
     }
 }

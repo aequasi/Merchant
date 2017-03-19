@@ -19,12 +19,13 @@ namespace Merchant
         public Merchant()
         {
             r.Add(this);
+            r.Add(Inventory.Instance);
             r.Add(Navigation.Instance);
             r.Add(ObjectManager.Instance);
             r.Add(new Loader());
             r.Add(new ProfileLoader(r.Get<Loader>()));
             r.Add(new Pather(r.Get<Navigation>(), r.Get<ObjectManager>(), r.Get<ProfileLoader>()));
-            r.Add(new Controller(r.Get<ObjectManager>(), r.Get<Pather>()));
+            r.Add(new Controller( r.Get<Inventory>(), r.Get<ObjectManager>(), r.Get<Pather>()));
             r.Add(new Manager(r.Get<Controller>(), r.Get<ObjectManager>(), r.Get<ProfileLoader>()));
             r.Add(new CMD(r.Get<Merchant>(), r.Get<ProfileLoader>()));
         }
