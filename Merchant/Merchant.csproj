@@ -55,6 +55,7 @@
     <Compile Include="DependencyMap\Router.cs" />
     <Compile Include="Engine\Controller.cs" />
     <Compile Include="Engine\Manager.cs" />
+    <Compile Include="Engine\Merchant\ChoreBoy.cs" />
     <Compile Include="Engine\Navigator\Pather.cs" />
     <Compile Include="GUI\CMD.cs">
       <SubType>Form</SubType>
@@ -75,9 +76,7 @@
       <DependentUpon>CMD.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Engine\Merchant\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>

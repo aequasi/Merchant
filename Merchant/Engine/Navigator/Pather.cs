@@ -63,6 +63,7 @@ namespace Merchant.Engine.Navigator
         {
             LocalPlayer player = ObjectManager.Player;
             Location playerPos = player.Position;
+
             Location[] pathArray = Navigation.CalculatePath(player.MapId, playerPos, destination, true);
             List<Location> pathList = pathArray.ToList();
             Location closestWaypoint = pathList.OrderBy(x => playerPos.GetDistanceTo(x)).First();

@@ -1,4 +1,5 @@
-﻿using Merchant.Engine.Navigator;
+﻿using Merchant.Engine.Merchant;
+using Merchant.Engine.Navigator;
 using ZzukBot.Game.Statics;
 using ZzukBot.Objects;
 
@@ -6,13 +7,13 @@ namespace Merchant.Engine
 {
     public class Controller
     {
-        private Inventory Inventory { get; }
+        private ChoreBoy ChoreBoy { get; }
         private ObjectManager ObjectManager { get; }
         private Pather Pather { get; }
 
-        public Controller(Inventory inventory, ObjectManager objectManager, Pather pather)
+        public Controller(ChoreBoy choreBoy, ObjectManager objectManager, Pather pather)
         {
-            Inventory = inventory;
+            ChoreBoy = choreBoy;
             ObjectManager = objectManager;
             Pather = pather;
         }
@@ -32,12 +33,9 @@ namespace Merchant.Engine
                     Pather.Traverse(player.CorpsePosition);
                     player.RetrieveCorpse();
                     break;
-                case Status.NEED2VENDOR:
-                    break;
-                case Status.NEED2RESTOCK:
-                    break;
-                case Status.NEED2REPAIR:
-                    break;
+                case Status.MERCHANTING:
+                    ChoreBoy.PathToVendor();
+                        break;
             }
         }
         public Status SwitchLogic()
@@ -50,8 +48,8 @@ namespace Merchant.Engine
                 return Status.GHOST;
             else
             {
-                if (Inventory.CountFreeSlots(false) <= 3)
-                    return Status.NEED2VENDOR;
+                if (ChoreBoy.NeedToMerchant() == true)
+                    return Status.MERCHANTING;
                 else
                     return Status.ALIVE;
             }
@@ -62,8 +60,6 @@ namespace Merchant.Engine
         ALIVE,
         DEAD,
         GHOST,
-        NEED2REPAIR,
-        NEED2RESTOCK,
-        NEED2VENDOR
+        MERCHANTING
     }
 }

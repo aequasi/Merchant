@@ -1,5 +1,6 @@
 ﻿using Merchant.DependencyMap;
 using Merchant.Engine;
+using Merchant.Engine.Merchant;
 using Merchant.Engine.Navigator;
 using Merchant.GUI;
 using Merchant.Loaders;
@@ -25,7 +26,8 @@ namespace Merchant
             r.Add(new Loader());
             r.Add(new ProfileLoader(r.Get<Loader>()));
             r.Add(new Pather(r.Get<Navigation>(), r.Get<ObjectManager>(), r.Get<ProfileLoader>()));
-            r.Add(new Controller( r.Get<Inventory>(), r.Get<ObjectManager>(), r.Get<Pather>()));
+            r.Add(new ChoreBoy(r.Get<Inventory>(), r.Get<ObjectManager>(), r.Get<Pather>()));
+            r.Add(new Controller(r.Get<ChoreBoy>(), r.Get<ObjectManager>(), r.Get<Pather>()));
             r.Add(new Manager(r.Get<Controller>(), r.Get<ObjectManager>(), r.Get<ProfileLoader>()));
             r.Add(new CMD(r.Get<Merchant>(), r.Get<ProfileLoader>()));
         }
